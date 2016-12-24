@@ -30,8 +30,6 @@ def create_app():
     config['development'].init_app(app)
     app.config["SECRET_KEY"] = "SunshineSucks"
 
-    #upvote_subscriber()
-
     db.init_app(app)
     login_manager.init_app(app)
 
@@ -40,7 +38,7 @@ def create_app():
     from .controllers.StoryController import mod_story as story_blueprint
     app.register_blueprint(story_blueprint)
 
-    from controllers.UserController import Login, UserList, StoryLike
+    from controllers.UserController import Login, UserList, UserStoryLike
     from app.models import User as db_user, Role
 
 
@@ -50,7 +48,7 @@ def create_app():
 
     api.add_resource(Login, '/user/login')
     api.add_resource(UserList, '/users')
-    api.add_resource(StoryLike, '/story/likes')
+    api.add_resource(UserStoryLike, '/story/likes')
 
     return app
 
