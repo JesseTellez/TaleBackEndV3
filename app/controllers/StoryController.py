@@ -1,11 +1,63 @@
 from flask import Blueprint, request, g, jsonify, json
 from .. import db
 from sqlalchemy.sql import exists
-from sqlalchemy import and_
-from app.models import Story, Addition, Vote
+from sqlalchemy import and_, exc
+from app.models.Addition import Addition as db_addition
+from app.models.Story import Story as db_story
+from app.models.User import User as db_user
+from flask_restful import Resource
 from sqlalchemy.ext.declarative import DeclarativeMeta
+from app.controllers import *
 # define the blueprint: 'story' - set the url prefix to story
 mod_story = Blueprint('story', __name__, url_prefix='/story')
+
+class CreateStory(Resource):
+    """Handle Story creation"""
+    def post(self):
+        req_json = request.get_json()
+        if req_json is None:
+            return get_error_response("Missing data, please fill out all fields")
+        owner_id = req_json.get("owner_id", None)
+        print type(owner_id)
+        title = req_json.get("title", None)
+        print type(title)
+        content = req_json.get("content", None)
+        print type(content)
+        genre_id = req_json.get("genre_id", None)
+        print type(genre_id)
+        current_user = db_user.query.filter_by(id=owner_id).first()
+
+        if owner_id is not None and title is not None and content is not None and genre_id is not None:
+            success = False
+            new_story = db_story(
+                title=str(title),
+                is_trending=False,
+                unique_indicies=1,
+                owner_id=owner_id,
+                genre_id=genre_id
+            )
+            new_story_base = db_addition(
+                content=str(content),
+                owner_id=owner_id,
+                story=new_story
+            )
+            try:
+                # only need to add this since we set up the relationship - dont mess with foriegn keys!!!
+                db.session.add(new_story_base)
+                db.session.commit()
+                success = True
+            except exc.NoReferencedTableError:
+                print "There was an exception"
+                db.session.rollback()
+            if success is True:
+                return jsonify({"message": "Story Successfully Created!"})
+            else:
+                return jsonify({"message": "Failed to create story.  Please try again."})
+        else:
+            return get_error_response("Some of the data is missing. Please fill out all of the required feilds")
+
+
+
 
 @mod_story.route('/active_additions/', methods=['GET'])
 def get_active_additions_for_story(storyid):
@@ -30,78 +82,25 @@ def update_story(options, serialize=True):
     story_to_update = db.session.query(Story).get(id)
     '''WORK IN PROGRESS'''
 
-
-@mod_story.route('/', methods=['POST'])
-def add_story():
-    #need to do this for the application/json content type
-    dataDict = json.loads(request.data)
-    #find an owner with this
-    owner_id = None
-    if 'owner_id' in dataDict:
-        owner_id = dataDict['owner_id']
-    title = None
-    if 'title' in dataDict:
-        title = dataDict['title']
-    content = None
-    if 'content' in dataDict:
-        content = dataDict['content']
-    genre_id = None
-    if 'genre_id' in dataDict:
-        genre_id = dataDict['genre_id']
-
-    if dataDict is None:
-        return jsonify({"message": "Missing data, be sure to fill out all of the fields"})
-
-    if owner_id is None or content is None or title is None or genre_id is None:
-        return jsonify({"message": "Some of the data is missing. Please fill out all of the required feilds"})
-
-    success = False
-    new_story = Story(
-        title=title,
-        is_trending=False,
-        unique_indicies=1,
-        owner_id=owner_id,
-        genre_id=genre_id
-    )
-    new_story_base = Addition(
-        content=content,
-        owner_id=owner_id,
-        #notice I use the backref here (what I think is the backref)
-        story=new_story
-    )
-    try:
-        #only need to add this since we set up the relationship - dont mess with foriegn keys!!!
-        db.session.add(new_story_base)
-        db.session.commit()
-        success = True
-    except:
-        db.session.rollback()
-
-    if success is True:
-        return jsonify({"message": "Story Successfully Created!"})
-    else:
-        return jsonify({"message": "Failed to create story.  Please try again."})
-
-
-@mod_story.route('/<int:story_id>/bookmark', methods=['POST'])
-def bookmark_story(story_id):
-    current_user_id = 5
-    bookmark_exists = db.session.query(
-        exists().where(and_(Vote.StoryVote.user_id == current_user_id, Vote.StoryVote.story_id == story_id))).scalar()
-    print("THIS IS BOOKMARK EXISTS STATUS" + str(bookmark_exists))
-    if bookmark_exists:
-        print("THE BOOKMARK EXISTS")
-        db.session.query(Vote.StoryVote).filter(
-            and_(Vote.StoryVote.user_id == current_user_id, Vote.StoryVote.story_id == story_id)).delete()
-        db.session.commit()
-    else:
-        new_bookmark = Vote.StoryVote(
-            user_id=current_user_id,
-            story_id=story_id
-        )
-        db.session.add(new_bookmark)
-        db.session.commit()
-    return get_story_helper(story_id)
+#@mod_story.route('/<int:story_id>/bookmark', methods=['POST'])
+# def bookmark_story(story_id):
+#     current_user_id = 5
+#     bookmark_exists = db.session.query(
+#         exists().where(and_(Vote.StoryVote.user_id == current_user_id, Vote.StoryVote.story_id == story_id))).scalar()
+#     print("THIS IS BOOKMARK EXISTS STATUS" + str(bookmark_exists))
+#     if bookmark_exists:
+#         print("THE BOOKMARK EXISTS")
+#         db.session.query(Vote.StoryVote).filter(
+#             and_(Vote.StoryVote.user_id == current_user_id, Vote.StoryVote.story_id == story_id)).delete()
+#         db.session.commit()
+#     else:
+#         new_bookmark = Vote.StoryVote(
+#             user_id=current_user_id,
+#             story_id=story_id
+#         )
+#         db.session.add(new_bookmark)
+#         db.session.commit()
+#     return get_story_helper(story_id)
 
 
 @mod_story.route('/<int:story_id>/new_addition', methods=['POST'])
@@ -158,27 +157,27 @@ def get_all_additions_for_active_addition():
         json_array.append(default_parser(add))
     return jsonify(relatedAdditions=json_array)
 
-@mod_story.route('/<int:story_id>/additions/<int:addition_id>', methods=['POST'])
-def bookmark_addition(story_id, addition_id):
-    current_user_id = 4  # we can possibly get this from the request params
-    # I dont want to do all these queries EVERYTIME I get a like
-    bookmark_exists = db.session.query(exists().where(Vote.AdditionVote.user_id == current_user_id)).scalar()
-    if bookmark_exists:
-        db.session.query(Vote.AdditionVote).filter(
-            and_(Vote.AdditionVote.user_id == current_user_id, Vote.AdditionVote.addition_id == addition_id)).delete()
-        db.session.commit()
-    else:
-        new_bookmark = Vote.AdditionVote(
-            user_id=current_user_id,
-            addition_id=addition_id
-        )
-        db.session.add(new_bookmark)
-        db.session.commit()
-    #MAKE IT SO THE STORY IS BASED ON GENRES, NOT CREATING STORIES AND THAT THE ADDITIONS ARE NOT VISABLE TO EACH OTHER?
-    #the issue is I just want to update the story right then and there....not reload it all
-    #just return the new value?
-    #probably want to do a redis pub/sub for this or work with socket IO
-    return get_story_helper(story_id)
+# @mod_story.route('/<int:story_id>/additions/<int:addition_id>', methods=['POST'])
+# def bookmark_addition(story_id, addition_id):
+#     current_user_id = 4  # we can possibly get this from the request params
+#     # I dont want to do all these queries EVERYTIME I get a like
+#     bookmark_exists = db.session.query(exists().where(Vote.AdditionVote.user_id == current_user_id)).scalar()
+#     if bookmark_exists:
+#         db.session.query(Vote.AdditionVote).filter(
+#             and_(Vote.AdditionVote.user_id == current_user_id, Vote.AdditionVote.addition_id == addition_id)).delete()
+#         db.session.commit()
+#     else:
+#         new_bookmark = Vote.AdditionVote(
+#             user_id=current_user_id,
+#             addition_id=addition_id
+#         )
+#         db.session.add(new_bookmark)
+#         db.session.commit()
+#     #MAKE IT SO THE STORY IS BASED ON GENRES, NOT CREATING STORIES AND THAT THE ADDITIONS ARE NOT VISABLE TO EACH OTHER?
+#     #the issue is I just want to update the story right then and there....not reload it all
+#     #just return the new value?
+#     #probably want to do a redis pub/sub for this or work with socket IO
+#     return get_story_helper(story_id)
 
 
 @mod_story.route('/<int:story_id>/additions', methods=['GET'])

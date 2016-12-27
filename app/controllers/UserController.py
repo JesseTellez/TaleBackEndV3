@@ -7,7 +7,7 @@ from .. import db
 from sqlalchemy.exc import IntegrityError
 from app.controllers import *
 from flask_security import utils
-from werkzeug import secure_filename
+from werkzeug.utils import secure_filename
 
 from app.utilities import RedisHandler as rHandle
 from app.utilities.Publisher import Publisher
@@ -51,6 +51,14 @@ class ProfilePic(Resource):
             user = db_user.query.filter_by(id=str(user_id)).first()
 
             #Delete the old pic if there is one
+            if user.profile_pic_url is not None:
+                os.remove(os.path.join(app.config['UPLOAD_FOLDER'], user.profile_pic_url))
+
+                user.profile_pic_url = filename
+                db.session.commit()
+                result = { "filename": filename }
+                return get_success_response(result)
+        return get_error_response("Upload Error")
 
 class UserList(Resource):
     """class to handle user creation routes"""

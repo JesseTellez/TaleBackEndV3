@@ -22,7 +22,7 @@ class Addition(db.Model):
     updated_at = db.Column(db.Date, default=datetime.utcnow)
 
     parent_reference = db.relationship('Addition', remote_side=[id])
-    bookmarks = db.relationship('AdditionVote', backref='addition', lazy='dynamic')
+    #bookmarks = db.relationship('AdditionVote', backref='addition', lazy='dynamic')
 
     def to_json(self):
         return {

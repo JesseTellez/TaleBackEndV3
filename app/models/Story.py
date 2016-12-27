@@ -20,7 +20,7 @@ class Story(db.Model):
     '''
     id = db.Column(db.Integer, primary_key=True)
     owner_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    genre_id = db.Column(db.Integer, db.ForeignKey('genres.id'))
+    genre_id = db.Column(db.Integer)
     title = db.Column(db.String(200), unique=True)
     is_trending = db.Column(db.Boolean, default=False)
     unique_indicies = db.Column(db.Integer, default=0)
@@ -31,7 +31,7 @@ class Story(db.Model):
         ex:
     '''
     additions = db.relationship('Addition', backref='story', lazy='dynamic', cascade='all')
-    bookmarks = db.relationship('StoryVote', backref='story', lazy='dynamic')
+    #bookmarks = db.relationship('StoryVote', backref='story', lazy='dynamic')
 
     def to_json(self, base=None, adds=None):
         return {

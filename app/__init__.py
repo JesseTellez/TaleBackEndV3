@@ -33,14 +33,12 @@ def create_app():
     app.config['SECURITY_PASSWORD_SALT'] = 'xxxxxxxxxxxx'
     app.config['SECRET_KEY'] = 'FmG9yqMxVfb9aoEVpn6J'
 
-
-
     db.init_app(app)
     login_manager.init_app(app)
 
     api = Api(app)
 
-    from .controllers.StoryController import mod_story as story_blueprint
+    from .controllers.StoryController import mod_story as story_blueprint, CreateStory
     app.register_blueprint(story_blueprint)
 
     from controllers.UserController import Login, UserList, UserStoryLike
@@ -54,6 +52,8 @@ def create_app():
     api.add_resource(Login, '/user/login')
     api.add_resource(UserList, '/users')
     api.add_resource(UserStoryLike, '/story/likes')
+    api.add_resource(CreateStory, '/stories')
+
 
     return app
 
