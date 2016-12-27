@@ -1,9 +1,6 @@
-#may introduce a circular referance
 from flask import *
 from functools import wraps
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer, BadSignature, SignatureExpired
-from config import config
-
 
 def auth_required(f):
     '''Decorator to require a valid token

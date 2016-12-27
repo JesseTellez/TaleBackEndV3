@@ -1,10 +1,14 @@
 import json
+import os
+from datetime import datetime
 from flask_restful import Resource
 from ..models.User import User as db_user
 from .. import db
 from sqlalchemy.exc import IntegrityError
 from app.controllers import *
 from flask_security import utils
+from werkzeug import secure_filename
+
 from app.utilities import RedisHandler as rHandle
 from app.utilities.Publisher import Publisher
 
@@ -29,6 +33,24 @@ class Login(Resource):
                 return json.jsonify(error="Invalid Password!")
         else:
             return json.jsonify(error="User does not exist!")
+
+class ProfilePic(Resource):
+    """Class to Handle profile pic routes"""
+    @auth_required
+    def post(self, user_id):
+        """Update profile picture"""
+        app = current_app._get_current_object()
+
+        file = request.files['file-0']
+        if file:
+            #Save the pic to the filesystem
+
+            filename = secure_filename(user_id + "_" + datetime.now().strftime("%Y%m%d%H%M%S"))
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+
+            user = db_user.query.filter_by(id=str(user_id)).first()
+
+            #Delete the old pic if there is one
 
 class UserList(Resource):
     """class to handle user creation routes"""
