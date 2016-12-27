@@ -32,7 +32,6 @@ class Login(Resource):
 
 class UserList(Resource):
     """class to handle user creation routes"""
-
     def post(self):
         """Create new user"""
         req_json = request.get_json()
@@ -52,6 +51,7 @@ class UserList(Resource):
             return get_error_response(msg)
 
         user.password_hash = utils.encrypt_password(password)
+        print user.password_hash
         try:
             db.session.add(user)
             db.session.commit()
@@ -65,6 +65,7 @@ class UserList(Resource):
 
 class User(Resource):
     """Class for handling fetching, updating, and deleting users"""
+    @auth_required
     def get(self, user_id):
         """Fetch user"""
         user = db_user.query.filter_by(id=str(user_id)).first()
@@ -72,6 +73,7 @@ class User(Resource):
             return get_success_response({"user": user.serialize})
         return get_error_response("User not found")
 
+    @auth_required
     def post(self, user_id):
         """Update User"""
         req_json = request.get_json()
@@ -135,7 +137,7 @@ class UserStoryLike(Resource):
     }]
     '''
     pub = Publisher()
-
+    @auth_required
     def post(self):
         """upvote a story"""
         '''SO the http request will send the data and then the python backend will publish to the client'''

@@ -2,10 +2,9 @@ import flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from config import config
-from flask_restful import Resource, Api
+from flask_restful import Api
 from flask_security import Security, SQLAlchemyUserDatastore
 import pymysql
-
 import redis
 
 config2 = {
@@ -15,9 +14,7 @@ config2 = {
 }
 
 r = redis.StrictRedis(**config2)
-#need this to load the mysqldb module in the app
 pymysql.install_as_MySQLdb()
-
 db = SQLAlchemy()
 
 login_manager = LoginManager()
@@ -29,6 +26,14 @@ def create_app():
     app.config.from_object(config['development'])
     config['development'].init_app(app)
     app.config["SECRET_KEY"] = "SunshineSucks"
+    app.config['SECURITY_REGISTERABLE'] = True
+    app.config["SECURITY_CONFIRMABLE"] = False
+    app.config["SECURITY_SEND_REGISTER_EMAIL"] = False
+    app.config["SECURITY_PASSWORD_HASH"] = 'pbkdf2_sha512'
+    app.config['SECURITY_PASSWORD_SALT'] = 'xxxxxxxxxxxx'
+    app.config['SECRET_KEY'] = 'FmG9yqMxVfb9aoEVpn6J'
+
+
 
     db.init_app(app)
     login_manager.init_app(app)
@@ -52,20 +57,3 @@ def create_app():
 
     return app
 
-
-def upvote_subscriber():
-    # this should always be running!!!!
-    channel = 'LikeChannel'
-    pubsub = r.pubsub()
-    pubsub.subscribe(channel)
-    '''
-    key = 'story:{storyid}:likes'.format(storyid=story_id)
-    value = '{userid}'.format(userid=user_id)
-    r.sadd(key, value)
-    key2 = 'user:{userid}:likes'.format(userid=user_id)
-    value2 = '{storyid}'.format(story_id)
-    r.sadd(key2, value2, key)
-    '''
-    while True:
-        for item in pubsub.listen():
-            print item['data']

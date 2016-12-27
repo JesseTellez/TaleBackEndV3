@@ -10,5 +10,6 @@ class DevelopmentConfig(Config):
     SQLALCHEMY_DATABASE_URI = 'mysql://Jesse:cheeseit007@localhost/talebase'
 
 config = {
+    'SECRET_KEY': "SunshineSucks",
     'development': DevelopmentConfig
 }
