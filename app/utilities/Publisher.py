@@ -2,6 +2,8 @@ from .. import r
 
 class Publisher():
 
+    '''I can make publisher for if something succeeded or not'''
+
     channel = 'DefaultChannel'
 
     def get_channel(self):
@@ -15,3 +17,5 @@ class Publisher():
             message = 'Story {storyid} now has {num_likes} upvotes'.format(storyid=story, num_likes=likes)
             r.publish(self.channel, message)
             return True
+        else:
+            return False

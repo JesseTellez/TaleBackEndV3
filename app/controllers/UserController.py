@@ -5,7 +5,8 @@ from .. import db
 from sqlalchemy.exc import IntegrityError
 from app.controllers import *
 from flask_security import utils
-from app.utilities import RedisHandler as rHandle, Publisher
+from app.utilities import RedisHandler as rHandle
+from app.utilities.Publisher import Publisher
 
 class Login(Resource):
     """Class to handle user login route"""
@@ -142,37 +143,40 @@ class UserStoryLike(Resource):
         story_id = req_json["story_id"]
         user_id = req_json["user_id"]
 
-        key_values = []
-
         redis_story_set = 'story:{storyid}:likes'.format(storyid=story_id)
-        redis_story_set_value = user_id
         redis_story_set_dict = {
             "key": redis_story_set,
-            "value": redis_story_set_value,
+            "value": user_id,
             "type": "user_like"
         }
-        key_values.append(redis_story_set_dict)
+        success, count = rHandle.save_to_redis(redis_story_set_dict)
 
         redis_user_set = 'user:{userid}:likes'.format(userid=user_id)
-        redis_user_set_value = story_id
         redis_user_set_dict = {
             "key": redis_user_set,
-            "value": redis_user_set_value,
+            "value": story_id,
             "type": "story_like"
         }
-        key_values.append(redis_user_set_dict)
-        #possibly make this return a Tuple
-        rHandle.save_to_redis(key_values)
+        rHandle.save_to_redis(redis_user_set_dict)
 
         self.pub.channel = 'LikeChannel'
 
         dict = {
-            "user_id": user_id,
-            "likes": story_id
+            "story_id": story_id,
+            "likes": count
         }
 
-        self.pub.create_and_send_message(dict)
+        print success
+        print count
 
-        return get_success_response({"success":True})
+        redis_success = False
+
+        if success:
+            redis_success = self.pub.create_and_send_message(dict)
+
+        if redis_success:
+            return get_success_response({"results": True})
+        else:
+            return get_error_response("Server Error")
 
 

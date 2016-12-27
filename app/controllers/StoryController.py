@@ -1,9 +1,7 @@
 from flask import Blueprint, request, g, jsonify, json
 from .. import db
-from flask_login import current_user
 from sqlalchemy.sql import exists
 from sqlalchemy import and_
-import app.utilities as util
 from app.models import Story, Addition, Vote
 from sqlalchemy.ext.declarative import DeclarativeMeta
 # define the blueprint: 'story' - set the url prefix to story
