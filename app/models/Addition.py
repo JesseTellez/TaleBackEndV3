@@ -24,12 +24,12 @@ class Addition(db.Model):
     parent_reference = db.relationship('Addition', remote_side=[id])
     #bookmarks = db.relationship('AdditionVote', backref='addition', lazy='dynamic')
 
-    def to_json(self):
+    def serialize(self, bookmarks=None):
         return {
             'id': self.id,
             'content': self.content,
             'parent_reference': self.parent_reference,
-            # 'book_marks': self.book_marks,
+            'book_marks': bookmarks,
             'index_reference': self.index_reference,
             'updated_at': self.updated_at
         }
@@ -38,7 +38,3 @@ class Addition(db.Model):
         if self.parent_reference is not None:
             return self.parent_reference.index_reference + 1
         return 0
-
-    def make_addition_active(self):
-        # what indexref are we?
-        pass

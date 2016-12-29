@@ -33,7 +33,7 @@ class Story(db.Model):
     additions = db.relationship('Addition', backref='story', lazy='dynamic', cascade='all')
     #bookmarks = db.relationship('StoryVote', backref='story', lazy='dynamic')
 
-    def to_json(self, base=None, adds=None):
+    def serialize(self, base=None, adds=None, unique_indicies=None):
         return {
             'id': self.id,
             'owner_id': self.owner_id,
@@ -42,7 +42,7 @@ class Story(db.Model):
             'is_trending': self.is_trending,
             'number_of_additions': self.additions.count(),
             'number_of_bookmarks': self.bookmarks.count(),
-            'unique_indicies_count': len(self.get_unique_indicies()),
+            'unique_indicies_count': len(unique_indicies),
             'created_at': self.created_at,
             'updated_at': self.updated_at,
             'base': base,
@@ -50,7 +50,7 @@ class Story(db.Model):
             'active_additions':  adds
         }
 
-    def to_feed_json(self):
+    def serialize_for_feed(self):
         return {
             'id': self.id,
             'title': self.title,
@@ -65,14 +65,5 @@ class Story(db.Model):
         for add in self.additions:
             index_array.append(add.index_reference)
         return Set(index_array)
-
-    def calculate_unique_indicies(self):
-        pass
-
-    def make_trending(self):
-        pass
-
-    def query_number_of_additions(self):
-        pass
 
 
