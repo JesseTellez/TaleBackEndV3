@@ -22,6 +22,7 @@ login_manager.session_protection = 'strong'
 
 
 def create_app():
+
     app = flask.Flask(__name__)
     app.config.from_object(config['development'])
     config['development'].init_app(app)
@@ -38,8 +39,8 @@ def create_app():
 
     api = Api(app)
 
-    from app.routing.StoryHandler import StoryListHandler, StoryHandler
-    from app.routing.UserHandler import LoginHandler, UserListHandler, UserStoryLike
+    from app.routing.StoryHandler import StoryListHandler, StoryHandler, StoryBookmarkHandler
+    from app.routing.UserHandler import LoginHandler, UserListHandler, UserHandler
     from app.models import User as db_user, Role
 
 
@@ -49,9 +50,10 @@ def create_app():
 
     api.add_resource(LoginHandler, '/user/login')
     api.add_resource(UserListHandler, '/users')
-    api.add_resource(UserStoryLike, '/story/likes')
+    api.add_resource(StoryBookmarkHandler, '/story/likes')
     api.add_resource(StoryListHandler, '/stories')
-
+    api.add_resource(UserHandler, 'user/<user_id>')
+    api.add_resource(StoryHandler, '/story/<story_id>')
 
     return app
 

@@ -47,3 +47,44 @@ def get_user(user_id):
         return True, results
     else:
         return False, "User not found"
+
+def update_user(user_id, email, username, password, location, bio):
+    if user_id is None:
+        return False, "user id not provided"
+    user = db_user.query.filter_by(id=str(user_id)).first()
+
+    if user is None:
+        return False, "user not found."
+
+    if email is not None and len(email) > 0:
+        user.email = email
+
+    if username is not None and len(username) > 0:
+        user.username = username
+
+    if location is not None and len(location) > 0:
+        user.city = location
+
+    if bio is not None and len(bio) > 0:
+        user.bio = bio
+
+    if password is not None:
+        user.password_hash = utils.encrypt_password(password)
+
+    db.session.commit()
+    result = {"user": user.serialize()}
+
+    return True, result
+
+def delete_user(user_id):
+    if user_id is None:
+        return False, "user id not provided."
+    user = db_user.query.filter_by(id=str(user_id)).first()
+    if user is None:
+        return False, "user not found."
+    db.session.delete(user)
+    db.session.commit()
+    return True, "user successfully deleted."
+
+
+

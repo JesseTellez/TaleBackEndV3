@@ -60,3 +60,25 @@ class StoryHandler(Resource):
         """delete an existing story"""
         pass
 
+class StoryBookmarkHandler(Resource):
+    """"""
+    '''
+    ---FORMAT---
+    keys_values = [{
+        key: 'story:{storyid}:likes',
+        value: '{storyid}'
+        tpye: "user_like"
+    }]
+    '''
+
+    @auth_required
+    def post(self):
+        '''Bookmark(upvote) a story - this may track progress in the future'''
+        '''SO the http request will send the data and then the python backend will publish to the client'''
+        req_json = request.get_json()
+        story_id = req_json["story_id"]
+        user_id = req_json["user_id"]
+        success = story_api.bookmark_story(story_id, user_id)
+
+        return get_success_response({"success": True}) if success else get_error_response("error while upvoting")
+

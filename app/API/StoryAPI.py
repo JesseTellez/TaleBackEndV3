@@ -1,11 +1,14 @@
-from flask import request, g, jsonify, json
+from flask import json
 from app import db
-from sqlalchemy.sql import exists
-from sqlalchemy import and_, exc
+from sqlalchemy import exc
 from app.models.Addition import Addition as db_addition
 from app.models.Story import Story as db_story
-from app.models.User import User as db_user
+from app.utilities import RedisHandler as redis_handler
 from sqlalchemy.ext.declarative import DeclarativeMeta
+from app.utilities.Publisher import Publisher
+
+pub = Publisher()
+
 
 def get_story_by_id(story_id):
 
@@ -66,6 +69,38 @@ def get_all_stories():
     all_stories = db.session.query(db_story).order_by(db_story.title).all()
     return all_stories
 
+def bookmark_story(story_id, user_id):
+    redis_story_set = 'story:{storyid}:likes'.format(storyid=story_id)
+    redis_story_set_dict = {
+        "key": redis_story_set,
+        "value": user_id,
+        "type": "user_like"
+    }
+    success, count = redis_handler.save_to_redis(redis_story_set_dict)
+
+    redis_user_set = 'user:{userid}:likes'.format(userid=user_id)
+    redis_user_set_dict = {
+        "key": redis_user_set,
+        "value": story_id,
+        "type": "story_like"
+    }
+    redis_handler.save_to_redis(redis_user_set_dict)
+
+    pub.channel = 'LikeChannel'
+
+    dict = {
+        "story_id": story_id,
+        "likes": count
+    }
+
+    redis_success = False
+    if success:
+        redis_success = pub.create_and_send_message(dict)
+
+    if redis_success:
+        return True
+    else:
+        return False
 
 def default_parser(o):
     if isinstance(o, tuple):
