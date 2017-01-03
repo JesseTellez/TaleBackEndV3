@@ -38,7 +38,7 @@ class StoryListHandler(Resource):
         else:
             return get_error_response("No Stories Found.")
 
-class Story(Resource):
+class StoryHandler(Resource):
 
     def get(self, story_id):
         """Get Story By ID"""

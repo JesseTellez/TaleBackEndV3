@@ -1,7 +1,3 @@
-from flask import request, g, jsonify, json
-from .. import db
-from sqlalchemy.ext.declarative import DeclarativeMeta
-from app.controllers import *
 from sets import Set
 
 class Controller:
@@ -21,5 +17,10 @@ class Controller:
         for add in story.additions:
             index_array.append(add.index_reference)
         return Set(index_array)
+
+    def addition_added_to_story(self):
+
+        '''publisher of the event of an addition being added to a select story'''
+        pass
 
 

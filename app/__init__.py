@@ -38,10 +38,8 @@ def create_app():
 
     api = Api(app)
 
-    from .controllers.StoryController import mod_story as story_blueprint, CreateStory
-    app.register_blueprint(story_blueprint)
-
-    from controllers.UserController import Login, UserList, UserStoryLike
+    from app.routing.StoryHandler import StoryListHandler, StoryHandler
+    from app.routing.UserHandler import LoginHandler, UserListHandler, UserStoryLike
     from app.models import User as db_user, Role
 
 
@@ -49,10 +47,10 @@ def create_app():
     security = Security()
     security.init_app(app, user_datastore)
 
-    api.add_resource(Login, '/user/login')
-    api.add_resource(UserList, '/users')
+    api.add_resource(LoginHandler, '/user/login')
+    api.add_resource(UserListHandler, '/users')
     api.add_resource(UserStoryLike, '/story/likes')
-    api.add_resource(CreateStory, '/stories')
+    api.add_resource(StoryListHandler, '/stories')
 
 
     return app

@@ -20,21 +20,21 @@ class Addition(db.Model):
     '''To query the base I just have to query when the index_reference is null for a give story'''
     created_at = db.Column(db.Date, default=datetime.utcnow)
     updated_at = db.Column(db.Date, default=datetime.utcnow)
-
     parent_reference = db.relationship('Addition', remote_side=[id])
-    #bookmarks = db.relationship('AdditionVote', backref='addition', lazy='dynamic')
 
     def serialize(self, bookmarks=None):
         return {
             'id': self.id,
             'content': self.content,
             'parent_reference': self.parent_reference,
-            'book_marks': bookmarks,
+            'bookmarks': bookmarks,
             'index_reference': self.index_reference,
+            'created_at':self.created_at,
             'updated_at': self.updated_at
         }
 
-    def calculate_index_ref(self):
-        if self.parent_reference is not None:
-            return self.parent_reference.index_reference + 1
-        return 0
+    def serialize_for_list(self):
+        return {
+            'id': self.id,
+            'content': self.content,
+        }
