@@ -7,10 +7,8 @@ from app.utilities import RedisHandler as redis_handler
 
 def create_addition(story_id, owner_id, parent_id, content):
     #dont need to check for owner if we put an auth token on the user
+    '''NEED TO MAKE AN ADDITION ACTIVE IF THERE IS NO ADDITION FOR THAT INDEX REFERENCE'''
     if content is not None and parent_id is not None and story_id is not None:
-        # Have to make a check that the parent that is found points to a story with the same
-        # story id, otherwise the parent logic is off
-        # story_information = db.session.query(Story).join(Story.additions).filter(and_(Addition.parent_id == parent_id, Story.id == story_id))
         story = db.session.query(db_story).get(story_id)
         parent = db.session.query(db_addition).filter(and_(db_addition.story_id == story_id, db_addition.id == parent_id)).first()
         if story is not None and parent is not None:
@@ -19,19 +17,19 @@ def create_addition(story_id, owner_id, parent_id, content):
                 owner_id=owner_id,
                 story=story,
                 parent_reference=parent,
-                index_referenec=addition_controller.calculate_index_ref(parent)
+                index_reference=addition_controller.calculate_index_ref(parent)
             )
             db.session.add(new_addition)
             db.session.commit()
-            return True
+            return True, {"message":"addition created"}
         else:
-            return False
+            return False, "story or parent does not exist"
     else:
-        return False
+        return False, "missing data"
 
 def get_all_additions(story_id):
     if story_id is not None:
-        story = db_addition.session.query(db_story).get(story_id)
+        story = db.session.query(db_story).get(story_id)
         if story is not None:
             all_additions = db.session.query(db_addition).filter(db_addition.story_id == story_id).all()
             results = {"additions": [addition.serialize_for_list() for addition in all_additions]}

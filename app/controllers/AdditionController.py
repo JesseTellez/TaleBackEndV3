@@ -1,6 +1,6 @@
 def calculate_index_ref(addition):
-    if addition.parent_reference is not None:
-        return addition.parent_reference.index_reference + 1
+    if addition.index_reference is not None:
+        return addition.index_reference + 1
     return 0
 
 def generate_index_reference(parent):

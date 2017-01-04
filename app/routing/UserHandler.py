@@ -5,10 +5,6 @@ from app.models.User import User as db_user
 from app import db
 from app.routing import *
 from werkzeug.utils import secure_filename
-
-from app.utilities import RedisHandler as redis_handler
-from app.utilities.Publisher import Publisher
-
 import app.API.UserAPI as user_api
 
 class LoginHandler(Resource):
@@ -16,8 +12,8 @@ class LoginHandler(Resource):
     def post(self):
         """Log User In"""
         req_json = request.get_json()
-        email = req_json["email"]
-        password = req_json["password"]
+        email = req_json.get('email', None)
+        password = req_json.get('password', None)
         success, results = user_api.login_user(email, password)
         return get_success_response(results) if success else get_error_response(results)
 
@@ -69,6 +65,7 @@ class UserHandler(Resource):
     @auth_required
     def post(self, user_id):
         """Update User"""
+        #THIS MUST BE THE USER THAT IS AUTHORIZED
         req_json = request.get_json()
         email = req_json.get('email', None)
         username = req_json.get('username', None)
@@ -86,7 +83,9 @@ class UserHandler(Resource):
         else:
             return get_error_response("user not found")
 
+    @auth_required
     def delete(self, user_id):
         """Delete User"""
+        """THIS MUST ALSO BE THE USER THAT WANTS TO DELETE THEIR OWN PROFILE, AUTH DOESNT CHECK FOR THIS"""
         success, message = user_api.delete_user(user_id)
         return get_success_response(message) if success else get_error_response(message)

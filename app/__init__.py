@@ -40,6 +40,7 @@ def create_app():
     api = Api(app)
 
     from app.routing.StoryHandler import StoryListHandler, StoryHandler, StoryBookmarkHandler
+    from app.routing.AdditionHandler import AdditionListHandler, ActiveAdditionHandler
     from app.routing.UserHandler import LoginHandler, UserListHandler, UserHandler
     from app.models import User as db_user, Role
 
@@ -50,10 +51,14 @@ def create_app():
 
     api.add_resource(LoginHandler, '/user/login')
     api.add_resource(UserListHandler, '/users')
-    api.add_resource(StoryBookmarkHandler, '/story/likes')
+    api.add_resource(UserHandler, '/user/<user_id>')
+
+    api.add_resource(StoryBookmarkHandler, '/story/<story_id>/likes')
     api.add_resource(StoryListHandler, '/stories')
-    api.add_resource(UserHandler, 'user/<user_id>')
     api.add_resource(StoryHandler, '/story/<story_id>')
+
+    api.add_resource(AdditionListHandler, '/<story_id>/additions')
+
 
     return app
 

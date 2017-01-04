@@ -1,10 +1,8 @@
 from app import db
 from flask import current_app
-import app.controllers.UserController as user_controller
 from app.models.User import User as db_user
 from flask_security import utils
-from app.models.Story import Story as db_story
-from app.utilities import RedisHandler as redis_handler
+from sqlalchemy import exc, and_, exists, or_
 
 def login_user(email, password):
     app = current_app._get_current_object()
@@ -20,22 +18,26 @@ def login_user(email, password):
         return False, "Invalide password."
 
 def create_user(email, username, password):
+    user_exists = db.session.query(exists().where(or_(db_user.email == email, db_user.username == username))).scalar()
+    if user_exists:
+        return False, "user with email or username already exists"
+
     if email is None or username is None or password is None:
-        return False, "Missing Data"
-
-    new_user = db_user(
-        email=email,
-        username=username,
-        password_hash=utils.encrypt_password(password)
-    )
-
+        return False, "missing data"
+    new_user = db_user()
+    new_user.email = str(email)
+    new_user.username = str(username)
+    new_user.password_hash = utils.encrypt_password(password)
+    new_user.city = ""
+    new_user.bio = ""
     try:
         db.session.add(new_user)
         db.session.commit()
-        results = {"user": new_user.serialize()}
+        results = {"user": new_user.serialize}
         return True, results
-    except:
-        return False, "Error when saving to db."
+    except exc.SQLAlchemyError, e:
+        exception = "Couldn't do it: %s" % e
+        return False, exception
 
 
 def get_user(user_id):
@@ -43,7 +45,7 @@ def get_user(user_id):
         return False, "user id not provided"
     user = db_user.query.filter_by(id=str(user_id)).first()
     if user is not None:
-        results = {"user": user.serialize()}
+        results = {"user": user.serialize}
         return True, results
     else:
         return False, "User not found"
@@ -72,7 +74,7 @@ def update_user(user_id, email, username, password, location, bio):
         user.password_hash = utils.encrypt_password(password)
 
     db.session.commit()
-    result = {"user": user.serialize()}
+    result = {"user": user.serialize}
 
     return True, result
 
@@ -84,7 +86,7 @@ def delete_user(user_id):
         return False, "user not found."
     db.session.delete(user)
     db.session.commit()
-    return True, "user successfully deleted."
+    return True, {"message":"user successfully deleted."}
 
 
 

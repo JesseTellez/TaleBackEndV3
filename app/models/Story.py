@@ -31,7 +31,6 @@ class Story(db.Model):
         ex:
     '''
     additions = db.relationship('Addition', backref='story', lazy='dynamic', cascade='all')
-    #bookmarks = db.relationship('StoryVote', backref='story', lazy='dynamic')
 
     def serialize(self, base=None, adds=None, unique_indicies=None):
         return {
@@ -41,7 +40,7 @@ class Story(db.Model):
             'title': self.title,
             'is_trending': self.is_trending,
             'number_of_additions': self.additions.count(),
-            'number_of_bookmarks': self.bookmarks.count(),
+            'number_of_bookmarks': 0,
             'unique_indicies_count': len(unique_indicies),
             'created_at': self.created_at,
             'updated_at': self.updated_at,
@@ -54,16 +53,8 @@ class Story(db.Model):
         return {
             'id': self.id,
             'title': self.title,
-            'number_of_bookmarks': self.query_bookmarks
+            'number_of_bookmarks': 0
             # add number of readers
         }
-
-    def get_unique_indicies(self):
-        if self.additions <= 0:
-            return 0
-        index_array = []
-        for add in self.additions:
-            index_array.append(add.index_reference)
-        return Set(index_array)
 
 

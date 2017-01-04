@@ -4,6 +4,7 @@ import app.API.StoryAPI as story_api
 
 class StoryListHandler(Resource):
     """Handle Story creation"""
+    @auth_required
     def post(self):
         req_json = request.get_json()
         if req_json is None:
@@ -12,27 +13,22 @@ class StoryListHandler(Resource):
         title = req_json.get("title", None)
         content = req_json.get("content", None)
         genre_id = req_json.get("genre_id", None)
-        #current_user = db_user.query.filter_by(id=owner_id).first()
 
         if owner_id is not None and title is not None and content is not None and genre_id is not None:
-            success = story_api.create_story(
+            success, message = story_api.create_story(
                 owner_id=owner_id,
                 title=title,
                 content=content,
                 genre_id=genre_id
             )
-            if success is True:
-                return jsonify({"message": "Story Successfully Created!"})
-            else:
-                return jsonify({"message": "Failed to create story.  Please try again."})
+            return get_success_response(message) if success else get_error_response(message)
         else:
             return get_error_response("Some of the data is missing. Please fill out all of the required feilds")
 
     def get(self):
         """Get a list of all stories"""
-        all_stories = story_api.get_all_stories()
-        if all_stories is not None:
-            results = [story.serialize_for_feed() for story in all_stories]
+        results = story_api.get_all_stories()
+        if results is not None:
             return get_success_response(results)
             #return jsonify([story.serialize_for_feed() for story in all_stories])
         else:
@@ -52,12 +48,15 @@ class StoryHandler(Resource):
         else:
             return get_error_response("Must Provide A Story ID")
 
+    @auth_required
     def post(self, story_id):
         """update existing story"""
         pass
 
+    @auth_required
     def delete(self, story_id):
         """delete an existing story"""
+        """NEED TO BE THE STORY OWNER"""
         pass
 
 class StoryBookmarkHandler(Resource):
@@ -72,13 +71,11 @@ class StoryBookmarkHandler(Resource):
     '''
 
     @auth_required
-    def post(self):
+    def post(self, story_id):
         '''Bookmark(upvote) a story - this may track progress in the future'''
         '''SO the http request will send the data and then the python backend will publish to the client'''
         req_json = request.get_json()
-        story_id = req_json["story_id"]
         user_id = req_json["user_id"]
-        success = story_api.bookmark_story(story_id, user_id)
-
-        return get_success_response({"success": True}) if success else get_error_response("error while upvoting")
+        success, message = story_api.bookmark_story(story_id, user_id)
+        return get_success_response(message) if success else get_error_response(message)
 

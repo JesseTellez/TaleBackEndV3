@@ -21,7 +21,9 @@ def get_active_additions(story):
     # the addition array should be a property on the story
     if story.additions is not None:
         for i in story.unique_indicies:
+            #Gets each addition at each index reference
             filtered_additions = filter(lambda x: x.index_reference == i, story)
+            #take this out of the for loop
             maxAddition = get_max_addition(filtered_additions)
             if maxAddition is not None:
                 response.insert(maxAddition, i)

@@ -4,7 +4,6 @@ import app.API.AdditionAPI as addition_api
 
 class AdditionListHandler(Resource):
 
-    #@mod_story.route('/<int:story_id>/new_addition', methods=['POST'])
     def post(self, story_id):
         """create a new addition for story"""
         req_json = request.get_json()
@@ -14,16 +13,16 @@ class AdditionListHandler(Resource):
         parent_id = req_json.get("parent_id", None)
         content = req_json.get("content", None)
 
-        success = addition_api.create_addition(story_id, owner_id, parent_id, content)
-        return get_success_response({"message": "addition succesfully created"}) if success else get_error_response("failed to create addition")
+        success, message = addition_api.create_addition(story_id, owner_id, parent_id, content)
+        return get_success_response(message) if success else get_error_response(message)
 
     def get(self, story_id):
         """get all additions for story"""
         try:
             results = addition_api.get_all_additions(story_id)
             return get_success_response(results)
-        except ValueError:
-            return get_error_response("something went wrong")
+        except ValueError, e:
+            return get_error_response(e)
 
 
 class ActiveAdditionHandler(Resource):
