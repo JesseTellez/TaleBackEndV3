@@ -1,9 +1,14 @@
 from app import db
 import app.controllers.AdditionController as addition_controller
-from sqlalchemy import and_
+from sqlalchemy import and_, exists
 from app.models.Addition import Addition as db_addition
 from app.models.Story import Story as db_story
+
+from app.utilities.Publisher import Publisher
 from app.utilities import RedisHandler as redis_handler
+
+#This can probably be imported from the __init__
+pub = Publisher()
 
 def create_addition(story_id, owner_id, parent_id, content):
     #dont need to check for owner if we put an auth token on the user
@@ -57,8 +62,38 @@ def get_additions_for_active_addition(story_id, addition_id):
         bookmarks = redis_handler.get_set_count(redis_addition_set)
         json_addition = addition.serialize(bookmarks)
         serializable_additions.append(json_addition)
-    #might need to use the parser here
-    # for add in related_additions:
-    #     json_array.append(default_parser(add))
-    # return jsonify(relatedAdditions=json_array)
     return serializable_additions
+
+def bookmark_addition(story_id, addition_id, user_id):
+    story_exists = db.session.query(exists().where(db_story.id == story_id)).scalar()
+    addition_exists = db.session.query(exists().where(db_addition.id == addition_id)).scalar()
+    if story_exists is False:
+        return False, "Story does not exist"
+
+    if addition_exists is False:
+        return False, "Addition does not exist"
+
+    redis_story_set = 'story:{storyid}:additions:{additionid}:likes'.format(storyid=story_id, additionid=addition_id)
+    redis_addition_set_dict = {
+        "key": redis_story_set,
+        "value": user_id,
+        "type": "user_like"
+    }
+    success, count = redis_handler.save_to_redis(redis_addition_set_dict)
+
+    pub.channel = 'LikeChannel'
+
+    dict = {
+        "addition": addition_id,
+        "likes": count
+    }
+    #FIX THIS STUFF
+    redis_success = False
+    if success:
+        redis_success = pub.create_and_send_message(dict)
+
+    if redis_success:
+        message = "story {storyid} now has {numlikes} bookmarks".format(storyid=story_id, numlikes=count)
+        return True, {"results": message}
+    else:
+        return False, "Unable to bookmark story"

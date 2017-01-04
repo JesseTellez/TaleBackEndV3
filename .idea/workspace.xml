@@ -1,22 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="BookmarkManager">
-    <bookmark url="file://$PROJECT_DIR$/app/API/AdditionAPI.py" line="28" />
+    <bookmark url="file://$PROJECT_DIR$/app/API/AdditionAPI.py" line="33" />
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5801d805-c59c-4936-a83c-af2d88e8592f" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/API/AdditionAPI.py" afterPath="$PROJECT_DIR$/app/API/AdditionAPI.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/API/StoryAPI.py" afterPath="$PROJECT_DIR$/app/API/StoryAPI.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/API/UserAPI.py" afterPath="$PROJECT_DIR$/app/API/UserAPI.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/__init__.py" afterPath="$PROJECT_DIR$/app/__init__.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/controllers/AdditionController.py" afterPath="$PROJECT_DIR$/app/controllers/AdditionController.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/controllers/StoryController.py" afterPath="$PROJECT_DIR$/app/controllers/StoryController.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/models/Story.py" afterPath="$PROJECT_DIR$/app/models/Story.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/routing/AdditionHandler.py" afterPath="$PROJECT_DIR$/app/routing/AdditionHandler.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/routing/StoryHandler.py" afterPath="$PROJECT_DIR$/app/routing/StoryHandler.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/routing/UserHandler.py" afterPath="$PROJECT_DIR$/app/routing/UserHandler.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/utilities/ContextManager.py" afterPath="$PROJECT_DIR$/app/utilities/ContextManager.py" />
     </list>
     <ignored path="TaleBackendV3.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -66,11 +57,9 @@
             <file leaf-file-name="StoryAPI.py" pinned="false" current-in-tab="false">
               <entry file="file://$PROJECT_DIR$/app/API/StoryAPI.py">
                 <provider selected="true" editor-type-id="text-editor">
-                  <state relative-caret-position="1462">
-                    <caret line="86" column="44" selection-start-line="86" selection-start-column="44" selection-end-line="86" selection-end-column="44" />
-                    <folding>
-                      <element signature="e#0#22#0" expanded="true" />
-                    </folding>
+                  <state relative-caret-position="170">
+                    <caret line="10" column="0" selection-start-line="10" selection-start-column="0" selection-end-line="10" selection-end-column="45" />
+                    <folding />
                   </state>
                 </provider>
               </entry>
@@ -78,7 +67,7 @@
             <file leaf-file-name="UserAPI.py" pinned="false" current-in-tab="false">
               <entry file="file://$PROJECT_DIR$/app/API/UserAPI.py">
                 <provider selected="true" editor-type-id="text-editor">
-                  <state relative-caret-position="17">
+                  <state relative-caret-position="85">
                     <caret line="5" column="0" selection-start-line="5" selection-start-column="0" selection-end-line="5" selection-end-column="0" />
                     <folding>
                       <element signature="e#0#18#0" expanded="true" />
@@ -90,8 +79,8 @@
             <file leaf-file-name="AdditionAPI.py" pinned="false" current-in-tab="true">
               <entry file="file://$PROJECT_DIR$/app/API/AdditionAPI.py">
                 <provider selected="true" editor-type-id="text-editor">
-                  <state relative-caret-position="408">
-                    <caret line="30" column="28" selection-start-line="30" selection-start-column="28" selection-end-line="30" selection-end-column="28" />
+                  <state relative-caret-position="645">
+                    <caret line="89" column="19" selection-start-line="89" selection-start-column="19" selection-end-line="89" selection-end-column="19" />
                     <folding>
                       <element signature="e#0#18#0" expanded="true" />
                     </folding>
@@ -107,6 +96,16 @@
                     <folding>
                       <element signature="e#0#29#0" expanded="true" />
                     </folding>
+                  </state>
+                </provider>
+              </entry>
+            </file>
+            <file leaf-file-name="ContextManager.py" pinned="false" current-in-tab="false">
+              <entry file="file://$PROJECT_DIR$/app/utilities/ContextManager.py">
+                <provider selected="true" editor-type-id="text-editor">
+                  <state relative-caret-position="442">
+                    <caret line="26" column="62" selection-start-line="26" selection-start-column="62" selection-end-line="26" selection-end-column="62" />
+                    <folding />
                   </state>
                 </provider>
               </entry>
@@ -134,21 +133,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ContextManager.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/utilities/ContextManager.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="442">
-              <caret line="26" column="62" selection-start-line="26" selection-start-column="62" selection-end-line="26" selection-end-column="62" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="AdditionHandler.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/routing/AdditionHandler.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="375">
-              <caret line="32" column="49" selection-start-line="32" selection-start-column="49" selection-end-line="32" selection-end-column="49" />
+            <state relative-caret-position="341">
+              <caret line="56" column="88" selection-start-line="56" selection-start-column="81" selection-end-line="56" selection-end-column="88" />
               <folding>
                 <element signature="e#0#34#0" expanded="true" />
               </folding>
@@ -169,8 +158,8 @@
       <file leaf-file-name="StoryHandler.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/routing/StoryHandler.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1190">
-              <caret line="70" column="7" selection-start-line="70" selection-start-column="7" selection-end-line="70" selection-end-column="7" />
+            <state relative-caret-position="361">
+              <caret line="75" column="107" selection-start-line="75" selection-start-column="107" selection-end-line="75" selection-end-column="107" />
               <folding>
                 <element signature="e#0#34#0" expanded="true" />
               </folding>
@@ -257,8 +246,8 @@
         <option value="$PROJECT_DIR$/app/__init__.py" />
         <option value="$PROJECT_DIR$/app/routing/UserHandler.py" />
         <option value="$PROJECT_DIR$/app/API/StoryAPI.py" />
-        <option value="$PROJECT_DIR$/app/routing/StoryHandler.py" />
         <option value="$PROJECT_DIR$/app/controllers/AdditionController.py" />
+        <option value="$PROJECT_DIR$/app/routing/StoryHandler.py" />
         <option value="$PROJECT_DIR$/app/routing/AdditionHandler.py" />
         <option value="$PROJECT_DIR$/app/API/AdditionAPI.py" />
       </list>
@@ -636,15 +625,15 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-7" y="0" width="1035" height="1047" extended-state="1" />
-    <editor active="true" />
+    <frame x="-7" y="0" width="1035" height="1047" extended-state="0" />
+    <editor active="false" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.22865555" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.35218784" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.35218784" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
@@ -948,16 +937,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/API/UserAPI.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="5" column="0" selection-start-line="5" selection-start-column="0" selection-end-line="5" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#18#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/models/Story.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="901">
@@ -978,16 +957,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/routing/UserHandler.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-387">
-          <caret line="25" column="47" selection-start-line="25" selection-start-column="47" selection-end-line="25" selection-end-column="47" />
-          <folding>
-            <element signature="e#0#9#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/utilities/Publisher.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="255">
@@ -996,39 +965,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/utilities/ContextManager.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="442">
-          <caret line="26" column="62" selection-start-line="26" selection-start-column="62" selection-end-line="26" selection-end-column="62" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/routing/StoryHandler.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1190">
-          <caret line="70" column="7" selection-start-line="70" selection-start-column="7" selection-end-line="70" selection-end-column="7" />
-          <folding>
-            <element signature="e#0#34#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/utilities/RedisHandler.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="136">
           <caret line="8" column="0" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/API/StoryAPI.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1462">
-          <caret line="86" column="44" selection-start-line="86" selection-start-column="44" selection-end-line="86" selection-end-column="44" />
-          <folding>
-            <element signature="e#0#22#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1042,6 +983,34 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/app/routing/UserHandler.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-387">
+          <caret line="25" column="47" selection-start-line="25" selection-start-column="47" selection-end-line="25" selection-end-column="47" />
+          <folding>
+            <element signature="e#0#9#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/utilities/ContextManager.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="442">
+          <caret line="26" column="62" selection-start-line="26" selection-start-column="62" selection-end-line="26" selection-end-column="62" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/routing/StoryHandler.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="361">
+          <caret line="75" column="107" selection-start-line="75" selection-start-column="107" selection-end-line="75" selection-end-column="107" />
+          <folding>
+            <element signature="e#0#34#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/app/controllers/AdditionController.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="187">
@@ -1050,10 +1019,28 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/app/API/UserAPI.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="85">
+          <caret line="5" column="0" selection-start-line="5" selection-start-column="0" selection-end-line="5" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/API/StoryAPI.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="170">
+          <caret line="10" column="0" selection-start-line="10" selection-start-column="0" selection-end-line="10" selection-end-column="45" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/app/routing/AdditionHandler.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="375">
-          <caret line="32" column="49" selection-start-line="32" selection-start-column="49" selection-end-line="32" selection-end-column="49" />
+        <state relative-caret-position="341">
+          <caret line="56" column="88" selection-start-line="56" selection-start-column="81" selection-end-line="56" selection-end-column="88" />
           <folding>
             <element signature="e#0#34#0" expanded="true" />
           </folding>
@@ -1062,8 +1049,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/API/AdditionAPI.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="408">
-          <caret line="30" column="28" selection-start-line="30" selection-start-column="28" selection-end-line="30" selection-end-column="28" />
+        <state relative-caret-position="645">
+          <caret line="89" column="19" selection-start-line="89" selection-start-column="19" selection-end-line="89" selection-end-column="19" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
           </folding>

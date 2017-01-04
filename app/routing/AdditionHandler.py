@@ -22,8 +22,7 @@ class AdditionListHandler(Resource):
             results = addition_api.get_all_additions(story_id)
             return get_success_response(results)
         except ValueError, e:
-            return get_error_response(e)
-
+            return get_error_response(e.message)
 
 class ActiveAdditionHandler(Resource):
 
@@ -37,3 +36,29 @@ class ActiveAdditionHandler(Resource):
             return get_success_response(additions)
         except ValueError:
             return get_error_response("something went wrong when grabbing additions for active")
+
+
+class AdditionBookmarkHandler(Resource):
+    """"""
+    '''
+    ---FORMAT---
+    keys_values = [{
+        key: 'story:{storyid}:likes',
+        value: '{storyid}'
+        tpye: "user_like"
+    }]
+    '''
+    def post(self, story_id, addition_id):
+        '''Bookmark(upvote) a story - this may track progress in the future'''
+        '''SO the http request will send the data and then the python backend will publish to the client'''
+        '''IF THE UPVOTE TRIGGERS AN ADDITION SWITCH, I NEED TO PRODUCE THAT EVENT'''
+        req_json = request.get_json()
+        user_id = req_json["user_id"]
+        success, message = addition_api.bookmark_addition(story_id, addition_id, user_id)
+        return get_success_response(message) if success else get_error_response(message)
+
+
+class ActiveAdditionListHandler(Resource):
+
+    def get(self, story_id):
+        """Get all active additions for story"""
