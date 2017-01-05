@@ -1,4 +1,4 @@
-from .. import r
+from app import r
 
 
 def save_to_redis(key_values):

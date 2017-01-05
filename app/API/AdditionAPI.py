@@ -26,6 +26,7 @@ def create_addition(story_id, owner_id, parent_id, content):
             )
             db.session.add(new_addition)
             db.session.commit()
+            addition_controller.save_addition_to_redis(story_id, new_addition)
             return True, {"message":"addition created"}
         else:
             return False, "story or parent does not exist"
@@ -65,6 +66,7 @@ def get_additions_for_active_addition(story_id, addition_id):
     return serializable_additions
 
 def bookmark_addition(story_id, addition_id, user_id):
+    #Get LIKES for this story for ALL additions at THIS indexreference
     story_exists = db.session.query(exists().where(db_story.id == story_id)).scalar()
     addition_exists = db.session.query(exists().where(db_addition.id == addition_id)).scalar()
     if story_exists is False:
@@ -73,9 +75,26 @@ def bookmark_addition(story_id, addition_id, user_id):
     if addition_exists is False:
         return False, "Addition does not exist"
 
-    redis_story_set = 'story:{storyid}:additions:{additionid}:likes'.format(storyid=story_id, additionid=addition_id)
+    #Check if we have already loaded this indexref for this story....
+    '''example below - this means story id 2131 at index ref 3 is in the cache'''
+    redis_index_references = 'storyindex = {2131: 3}'
+
+    story = db.session.query(db_addition).filter(db_addition.id == addition_id).first()
+    addition = db.session.query(db_addition).filter(db_addition.id == addition_id).first()
+    index_ref = addition.index_reference
+
+    additions_at_indexref = addition_controller.get_additions_at_index_reference(story, index_ref)
+
+    for add in additions_at_indexref:
+        redis_addition_query = 'story:{storyid}:additions'
+
+    #load the bookmarks of these additions from redis
+    redis_addition_query = 'story:{storyid}:additions'
+
+
+    redis_addition_set = 'story:{storyid}:additions:{additionid}:likes'.format(storyid=story_id, additionid=addition_id)
     redis_addition_set_dict = {
-        "key": redis_story_set,
+        "key": redis_addition_set,
         "value": user_id,
         "type": "user_like"
     }
