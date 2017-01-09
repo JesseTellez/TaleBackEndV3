@@ -56,7 +56,8 @@ def create_story(owner_id, title, content, genre_id):
         new_story_base = db_addition(
             content=str(content),
             owner_id=owner_id,
-            story=new_story
+            story=new_story,
+            is_active=True
         )
 
         try:

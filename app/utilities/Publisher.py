@@ -19,3 +19,11 @@ class Publisher():
             return True
         else:
             return False
+
+    def story_changed_event(self, addition_id, index_reference):
+        if self.channel == 'AdditionChangedChannel':
+            message = 'Addition {additionid} has become the new active addition at index {indexref}'.format(
+                additionid=addition_id,
+                indexref=index_reference
+            )
+            r.publish(self.channel, message)

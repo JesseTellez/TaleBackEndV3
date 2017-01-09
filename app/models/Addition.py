@@ -9,7 +9,6 @@ __all__ = ['Addition']
 
 class Addition(db.Model):
     __tablename__ = 'additions'
-    # NOTE - whenever you upvote an addition, that addition has to be re-evaluated.....checked against other additions within that story within that indexRef
     id = db.Column(db.Integer, primary_key=True)
     content = db.Column(db.Text(2000))
     owner_id = db.Column(db.Integer, db.ForeignKey('users.id'))
@@ -17,6 +16,7 @@ class Addition(db.Model):
     #parent id may not be able to be null....so how do I handle the base?
     parent_id = db.Column(db.Integer, db.ForeignKey('additions.id'))
     index_reference = db.Column(db.Integer)
+    is_active = db.Column(db.Boolean, default=False)
     '''To query the base I just have to query when the index_reference is null for a give story'''
     created_at = db.Column(db.Date, default=datetime.utcnow)
     updated_at = db.Column(db.Date, default=datetime.utcnow)
@@ -29,6 +29,7 @@ class Addition(db.Model):
             'parent_reference': self.parent_reference,
             'bookmarks': bookmarks,
             'index_reference': self.index_reference,
+            'is_active': self.is_active,
             'created_at':self.created_at,
             'updated_at': self.updated_at
         }

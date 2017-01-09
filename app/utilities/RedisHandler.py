@@ -34,4 +34,7 @@ def save_to_redis(key_values):
             return True, count
     else:
         return False, 0
-    return False, 0
+
+def get_bookmarks_for_addition(addition):
+    bookmarks = r.mget(addition.id)
+    return bookmarks

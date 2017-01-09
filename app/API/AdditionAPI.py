@@ -12,17 +12,22 @@ pub = Publisher()
 
 def create_addition(story_id, owner_id, parent_id, content):
     #dont need to check for owner if we put an auth token on the user
-    '''NEED TO MAKE AN ADDITION ACTIVE IF THERE IS NO ADDITION FOR THAT INDEX REFERENCE'''
     if content is not None and parent_id is not None and story_id is not None:
+        story_exists = db.session.query(exists().where(db_story.id == story_id)).scalar()
+
+        if story_exists is False:
+            return False, "Story does not exist"
         story = db.session.query(db_story).get(story_id)
         parent = db.session.query(db_addition).filter(and_(db_addition.story_id == story_id, db_addition.id == parent_id)).first()
-        if story is not None and parent is not None:
+        if parent is not None:
+            index_ref = addition_controller.calculate_index_ref(parent)
             new_addition = db_addition(
                 content=str(content),
                 owner_id=owner_id,
                 story=story,
                 parent_reference=parent,
-                index_reference=addition_controller.calculate_index_ref(parent)
+                index_reference=index_ref,
+                is_active=addition_controller.active_addition_exists_at_index_reference(story, index_ref)
             )
             db.session.add(new_addition)
             db.session.commit()
@@ -66,53 +71,36 @@ def get_additions_for_active_addition(story_id, addition_id):
     return serializable_additions
 
 def bookmark_addition(story_id, addition_id, user_id):
-    #Get LIKES for this story for ALL additions at THIS indexreference
     story_exists = db.session.query(exists().where(db_story.id == story_id)).scalar()
     addition_exists = db.session.query(exists().where(db_addition.id == addition_id)).scalar()
     if story_exists is False:
         return False, "Story does not exist"
-
     if addition_exists is False:
         return False, "Addition does not exist"
 
-    #Check if we have already loaded this indexref for this story....
-    '''example below - this means story id 2131 at index ref 3 is in the cache'''
-    redis_index_references = 'storyindex = {2131: 3}'
-
     story = db.session.query(db_addition).filter(db_addition.id == addition_id).first()
     addition = db.session.query(db_addition).filter(db_addition.id == addition_id).first()
-    index_ref = addition.index_reference
-
-    additions_at_indexref = addition_controller.get_additions_at_index_reference(story, index_ref)
-
-    for add in additions_at_indexref:
-        redis_addition_query = 'story:{storyid}:additions'
-
-    #load the bookmarks of these additions from redis
-    redis_addition_query = 'story:{storyid}:additions'
-
-
-    redis_addition_set = 'story:{storyid}:additions:{additionid}:likes'.format(storyid=story_id, additionid=addition_id)
-    redis_addition_set_dict = {
-        "key": redis_addition_set,
-        "value": user_id,
-        "type": "user_like"
-    }
-    success, count = redis_handler.save_to_redis(redis_addition_set_dict)
-
-    pub.channel = 'LikeChannel'
-
-    dict = {
-        "addition": addition_id,
-        "likes": count
-    }
-    #FIX THIS STUFF
-    redis_success = False
-    if success:
-        redis_success = pub.create_and_send_message(dict)
-
-    if redis_success:
-        message = "story {storyid} now has {numlikes} bookmarks".format(storyid=story_id, numlikes=count)
-        return True, {"results": message}
+    if addition.is_active:
+        bookmark_success, count = addition_controller.redis_add_addition_bookmark(story_id, addition_id, user_id)
+        if bookmark_success:
+            message = "addition {additionid} now has {numlikes} bookmarks".format(additionid=addition_id, numlikes=count)
+            return True, {"results": message}
+        return False, "Unable to bookmark story"
     else:
+        # Get LIKES for the ACTIVE ADDITION of this index for this story at this indexreference
+        active_addition = next((aa for aa in story.additions if aa.index_reference == addition.index_reference and
+                                aa.is_active is True), None)
+        if active_addition is None:
+            return False, "Something went wrong"
+
+        bookmarks = redis_handler.get_bookmarks_for_addition(active_addition)
+
+        bookmark_success, count = addition_controller.redis_add_addition_bookmark(story_id, addition_id, user_id)
+
+        if count > bookmarks:
+            addition_controller.change_active_addition(active_addition, addition)
+
+        if bookmark_success:
+            message = "addition {additionid} now has {numlikes} bookmarks".format(additionid=addition_id, numlikes=count)
+            return True, {"results": message}
         return False, "Unable to bookmark story"

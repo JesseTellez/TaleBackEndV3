@@ -4,7 +4,6 @@ import app.API.StoryAPI as story_api
 
 class StoryListHandler(Resource):
     """Handle Story creation"""
-    @auth_required
     def post(self):
         req_json = request.get_json()
         if req_json is None:
