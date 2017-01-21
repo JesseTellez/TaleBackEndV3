@@ -78,3 +78,10 @@ class StoryBookmarkHandler(Resource):
         success, message = story_api.bookmark_story(story_id, user_id)
         return get_success_response(message) if success else get_error_response(message)
 
+
+class TestStoryHandler(Resource):
+
+    def get(self):
+        "Create Test Stories"
+        story_api.create_test_stories()
+

@@ -88,5 +88,16 @@ def delete_user(user_id):
     db.session.commit()
     return True, {"message":"user successfully deleted."}
 
+def create_test_users():
+    arr = ["first", "second", "third", "fourth", "fifth"]
+    for item in arr:
+        new_user = db_user()
+        new_user.email = "{x}@mailinator.com".format(x=item)
+        new_user.username = "{x}FTW".format(x=item)
+        new_user.password_hash = utils.encrypt_password("cheese")
+        new_user.city = "Denver"
+        new_user.bio = "{x}".format(x=item)
+        db.session.add(new_user)
+        db.session.commit()
 
 

@@ -79,7 +79,7 @@ def get_all_stories():
     results = []
     if all_stories is not None:
         results = [story.serialize_for_feed() for story in all_stories]
-    return {"results": results}
+    return {"stories": results}
 
 def bookmark_story(story_id, user_id):
 
@@ -119,6 +119,29 @@ def bookmark_story(story_id, user_id):
         return True, {"results": message}
     else:
         return False, "Unable to bookmark story"
+
+
+def create_test_stories():
+
+    arr = ["first", "second", "third", "fourth", "fifth"]
+
+    for x in arr:
+        new_story = db_story(
+            title="{x} Story on Tale".format(x=x),
+            is_trending=False,
+            unique_indicies=1,
+            owner_id=1,
+            genre_id=3
+        )
+
+        new_story_base = db_addition(
+            content="This is the base of the {x} story".format(x=x),
+            owner_id=1,
+            story=new_story,
+            is_active=True
+        )
+        db.session.add(new_story_base)
+        db.session.commit()
 
 def default_parser(o):
     if isinstance(o, tuple):

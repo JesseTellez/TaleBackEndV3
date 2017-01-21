@@ -89,3 +89,9 @@ class UserHandler(Resource):
         """THIS MUST ALSO BE THE USER THAT WANTS TO DELETE THEIR OWN PROFILE, AUTH DOESNT CHECK FOR THIS"""
         success, message = user_api.delete_user(user_id)
         return get_success_response(message) if success else get_error_response(message)
+
+
+class TestUserHandler(Resource):
+    def get(self):
+        '''Create some test users'''
+        user_api.create_test_users()

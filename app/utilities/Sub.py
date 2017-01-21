@@ -1,7 +1,4 @@
 import redis
-import ast
-
-#Treat this as a fake ios client - this is essentially what the ios client is going to do
 
 '''This is a Test Subscriber that is going to act as the IOS client'''
 

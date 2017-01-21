@@ -1,4 +1,7 @@
 from app import r, db
+from app.models.Addition import Addition as db_addition
+from app.models.Story import Story as db_story
+
 from app.utilities import RedisHandler as redis_handler
 from app.utilities.Publisher import Publisher
 pub = Publisher()
@@ -18,8 +21,8 @@ def change_active_addition(active_addition_old, active_addition_new):
     '''Publisher for the change event of an active addition'''
     '''the UI will be the subscriber and update the story real-time'''
     #Publish this event
-    active_addition_old.is_active = False
-    active_addition_new.is_active = True
+    update_old_addition = db.session.update(db_addition).where(db_addition.id == active_addition_old.id).values(is_active=False)
+    update_new_addition = db.session.update(db_addition).where(db_addition.id == active_addition_new.id).values(is_active=True)
     db.session.commit()
     pub.story_changed_event(active_addition_new.story_id, active_addition_new.index_reference)
 

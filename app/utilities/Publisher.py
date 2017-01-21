@@ -12,9 +12,9 @@ class Publisher():
     def create_and_send_message(self, dictionary):
         if self.channel == 'LikeChannel':
             #return number of likes for a story to IOS client
-            story = dictionary["story_id"]
+            addition = dictionary["addition"]
             likes = dictionary["likes"]
-            message = 'Story {storyid} now has {num_likes} upvotes'.format(storyid=story, num_likes=likes)
+            message = 'Addition {additionid} now has {num_likes} upvotes'.format(additionid=addition, num_likes=likes)
             r.publish(self.channel, message)
             return True
         else:

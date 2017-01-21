@@ -78,7 +78,7 @@ def bookmark_addition(story_id, addition_id, user_id):
     if addition_exists is False:
         return False, "Addition does not exist"
 
-    story = db.session.query(db_addition).filter(db_addition.id == addition_id).first()
+    story = db.session.query(db_story).filter(db_story.id == story_id).first()
     addition = db.session.query(db_addition).filter(db_addition.id == addition_id).first()
     if addition.is_active:
         bookmark_success, count = addition_controller.redis_add_addition_bookmark(story_id, addition_id, user_id)
@@ -96,8 +96,10 @@ def bookmark_addition(story_id, addition_id, user_id):
         bookmarks = redis_handler.get_bookmarks_for_addition(active_addition)
 
         bookmark_success, count = addition_controller.redis_add_addition_bookmark(story_id, addition_id, user_id)
-
+        print count
+        print "Bookmarks" + str(bookmarks)
         if count > bookmarks:
+            print "am I getting here"
             addition_controller.change_active_addition(active_addition, addition)
 
         if bookmark_success:

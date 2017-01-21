@@ -7,7 +7,8 @@ class Config:
 
 class DevelopmentConfig(Config):
     DEBUG = True
-    SQLALCHEMY_DATABASE_URI = 'mysql://Jesse:cheeseit007@localhost/talebase'
+    #This is either root or Jesse depending on what comp im on
+    SQLALCHEMY_DATABASE_URI = 'mysql://root:cheeseit007@localhost/talebase'
 
 config = {
     'SECRET_KEY': "SunshineSucks",
