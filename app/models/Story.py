@@ -51,9 +51,9 @@ class Story(db.Model):
 
     def serialize_for_feed(self):
         return {
-            'id': self.id,
+            'id': str(self.id),
             'title': self.title,
-            'number_of_bookmarks': 0
+            'number_of_bookmarks': str(0)
             # add number of readers
         }
 
