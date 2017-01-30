@@ -1,5 +1,6 @@
 from sets import Set
 
+'''This is a good example of something that should not be in the controller layer - this layer should take the object and do something with it'''
 def get_active_additions():
     pass
 
