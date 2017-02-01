@@ -1,19 +1,17 @@
 from datetime import datetime
 from app import db
-
-__all__ = ['Story']
-
+'''
 class Premise(db.Model):
 
     __tablename__ = 'story_premise'
 
-    '''This class will define a story's premise - What is the foundation/base of this story?'''
+    #This class will define a story's premise - What is the foundation/base of this story?
 
-    '''This will be used for stories that are formed from segments in a pool'''
+    #This will be used for stories that are formed from segments in a pool
 
-    '''segments will be chosen by the owner from a pool of segments that are provided '''
+    #segments will be chosen by the owner from a pool of segments that are provided
 
-    '''each premise owns a pool that will have items manually and automatically added to it'''
+    #each premise owns a pool that will have items manually and automatically added to it
 
     id = db.Column(db.Integer, primary_key=True)
     pitch = db.Column(db.Text(400))
@@ -35,3 +33,4 @@ class Premise(db.Model):
             'pitch': self.pitch,
             'characters': serialized_characters
         }
+'''

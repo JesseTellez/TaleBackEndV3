@@ -39,3 +39,4 @@ def create_premise():
     pass
 
 def promote_premise():
+    pass
