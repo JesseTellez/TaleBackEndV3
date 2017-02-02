@@ -1,7 +1,9 @@
 from datetime import datetime
 from app import db
-from app.models.AssoicationTables import Characters_Triats as characters_traits
+from app.models.AssoicationTables import Characters_Traits as characters_traits
 from app.models.AssoicationTables import Conflicts_Traits as conflicts_traits
+
+__all__ = ['Trait']
 
 class Trait(db.Model):
 
@@ -29,13 +31,9 @@ class Trait(db.Model):
 
     trancendance_level = db.Column(db.Integer, nullable=False, default=0)
 
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    #conflict_parents = db.relationship("Conflict", secondary=conflicts_traits, back_populates="traits")
 
-    updated_at = db.Column(db.DateTime, default=datetime.utcnow)
-
-    conflict_parents = db.relationship("Conflict", secondary=conflicts_traits, back_populates="traits")
-
-    character_parents = db.relationship("Character", secondary=characters_traits, back_populates="traits")
+    character_parents = db.relationship("Character", secondary="characters_traits", back_populates="personal_traits")
 
     def serialize(self):
         return {

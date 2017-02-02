@@ -1,8 +1,8 @@
 from app import db
-from sqlalchemy import and_, exists, or_, in_
+from sqlalchemy import and_, exists, or_
 from app.models.Character import Character as db_character
-from app.model.Trait import Trait as db_trait
-from app.model.User import User as db_user
+from app.models.Trait import Trait as db_trait
+from app.models.User import User as db_user
 
 from app.utilities.Publisher import Publisher
 from app.utilities import RedisHandler as redis_handler
@@ -88,6 +88,8 @@ def create_test_traits():
         temperance_level=100,
         trancendance_level=100
     )
+    test_trait_list = [test_trait_1, test_trait_2, test_trait_3, test_trait_4]
 
-    db.session.add([test_trait_1, test_trait_2, test_trait_3, test_trait_4])
+    for trait in test_trait_list:
+        db.session.add(trait)
     db.session.commit()

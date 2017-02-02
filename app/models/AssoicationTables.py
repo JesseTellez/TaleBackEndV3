@@ -2,7 +2,7 @@ from datetime import datetime
 from app import db
 
 
-class Characters_Triats(db.Model):
+class Characters_Traits(db.Model):
     __tablename__ = "characters_traits"
 
     id = db.Column(db.Integer, primary_key=True)

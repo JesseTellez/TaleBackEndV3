@@ -2,7 +2,7 @@
 
 from datetime import datetime
 from app import db
-
+from app.models.AssoicationTables import Characters_Traits as characters_traits
 
 __all__ = ['Character']
 
@@ -20,19 +20,22 @@ class Character(db.Model):
 
     age = db.Column(db.Integer, nullable=False)
 
+    created_at = db.Column(db.Date, default=datetime.utcnow)
+
+    updated_at = db.Column(db.Date, default=datetime.utcnow)
+
     owner_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
     #these can be character traits and motive/resolve traits
-    personal_traits = db.relationship('Trait', secondary=characters_traits, back_populates="characters")
+    personal_traits = db.relationship('Trait', secondary="characters_traits", back_populates="character_parents")
 
     #belongs to many
     #premises = db.relationship('Premise', backref='characters', lazy='dynamic', cascade='all')
 
-    owner = db.relationship('User', backref='characters', lazy='dynamic', cascade='all')
+    owner = db.relationship('User', backref='characters')
 
     def serialize(self, serialized_personal_traits, serialized_premises, serialized_owner):
         return {
-
             'id': self.id,
             'name': self.name,
             'image': self.image,
@@ -40,7 +43,6 @@ class Character(db.Model):
             'age': self.age,
             'personal_traits': serialized_personal_traits,
             'owner': serialized_owner
-
         }
 
 
